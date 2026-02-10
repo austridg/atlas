@@ -2,10 +2,9 @@ import os
 from openai import OpenAI
 from pathlib import Path
 
-# configured openai connection
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-PROMPT_PATH = Path(__file__).resolve().parents[1] / "private" / "system_prompt.txt"
+PROMPT_PATH = Path(__file__).resolve().parents[1] / "context" / "system_prompt.txt"
 
 def load_system_prompt() -> str:
     return PROMPT_PATH.read_text(encoding="utf-8")

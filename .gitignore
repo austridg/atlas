@@ -47,7 +47,3 @@ htmlcov/
 dist/
 build/
 *.egg-info/
-
-private/
-data/
-*.local
