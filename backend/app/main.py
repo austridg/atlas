@@ -10,7 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
 if not os.getenv("OPENAI_API_KEY"):
-    raise RuntimeError("OPENAI_API_KEY is not set. Add it to your .env file.")
+    raise RuntimeError("OPENAI_API_KEY is not set")
 
 from core.llm import chat_llm
 
@@ -26,7 +26,7 @@ class ChatResponse(BaseModel):
 def chat(req: ChatRequest):
     text = req.message.strip()
     if not text:
-        return ChatResponse(reply="Hello?")
+        raise HTTPException(status_code=400, detail=f"Can't send empty message: {e}")
     
     try:
         reply = chat_llm(text)
