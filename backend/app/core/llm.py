@@ -2,34 +2,38 @@ import os
 from openai import OpenAI
 from pathlib import Path
 
-from core.memory.conversation_history import *
+from core.memory.conversation_history import Conversation
 
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-PROMPT_PATH = Path(__file__).resolve().parents[1] / "context" / "system_prompt.txt"
+class Chat:
 
-def load_system_prompt() -> str:
-    return PROMPT_PATH.read_text(encoding="utf-8")
+    def __init__(self):
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def chat_llm(message: str) -> str:
-    add_user_msg(message)
+        prompt_path = Path(__file__).resolve().parents[1] / "context" / "system_prompt.txt"
+        self.system_prompt = prompt_path.read_text(encoding="utf-8")
 
-    system_prompt = load_system_prompt()
+        self.conversation = Conversation()
 
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {"role": "system", "content": system_prompt},
-            *conversation,
-        ],
-        temperature=0.3
-    )
+    def chat(self, message: str) -> str:
+        self.conversation.add_user_msg(message)
 
-    reply = response.choices[0].message.content
+        messages = [
+            {"role": "system", "content": self.system_prompt},
+            *self.conversation.get_messages()
+        ]
 
-    add_bot_msg(response)
+        response = self.client.chat.completions.create(
+            model="gpt-4.1-mini",
+            messages=messages,
+            temperature=0.3
+        )
 
-    # debugging
-    # print_conversation()
+        reply = response.choices[0].message.content
 
-    return reply
+        self.conversation.add_assistant_msg(reply)
+
+        return reply
+
+    def reset(self) -> None:
+        self.conversation.delete_conversation()
