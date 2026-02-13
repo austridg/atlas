@@ -1,29 +1,34 @@
 # import db
 import json
 
-conversation = []
+class Conversation:
 
-def get_conversation():
-    return conversation;
+    def __init__(self):
+        self.messages = []
 
-def add_user_msg(message: str) -> None:
-    if len(conversation) >= 5:
-        delete_conversation()
-    conversation.append({"role" : "user","content" : message})
+    def get_messages(self):
+        return self.messages
+    
+    def check_msg_limit(self) -> bool:
+        return len(self.messages) >= 5
+    
+    def add_user_msg(self, message: str) -> None:
+        if self.check_msg_limit():
+            self.delete_conversation()
+        self.messages.append({"role" : "user","content" : message})
 
-def add_bot_msg(message: str) -> None:
-    if len(conversation) >= 5:
-        delete_conversation()
-    conversation.append({"role" : "assistant","content" : message})
+    def add_assistant_msg(self, message: str) -> None:
+        if self.check_msg_limit():
+            self.delete_conversation()
+        self.messages.append({"role" : "assistant","content" : message})
 
-def delete_conversation() -> None:
-    conversation.clear()
+    def delete_conversation(self) -> None:
+        self.messages.clear()
 
-def save_conversation(conversation,filename="conversation.json") -> None:
-    with open(filename,"w",encoding="utf-8") as file:
-        json.dump(conversation,file,indent=4)
+    def save_conversation(self,filename="conversation.json") -> None:
+        with open(filename,"w",encoding="utf-8") as file:
+            json.dump(self.messages,file,indent=4)
 
-# debugging
-def print_conversation() -> None:
-    for msg in conversation:
-        print(f"{msg['role']} : {msg['content']}")
+    def print_conversation(self) -> None:
+        for msg in self.messages:
+            print(f"{msg['role']} : {msg['content']}")
