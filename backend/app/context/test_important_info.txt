@@ -1,0 +1,10 @@
+You will read the user's query and determine whether or not it's classified as important information.
+If it's important information, return "Important". If not, return "Not Important".
+
+Critera for important information:
+    - Personal information about the user
+    - Information the user says is important
+    - Information that would allow you to respond better to their future queries
+
+Do not return "Important" if the information is:
+    - Sensitive information about the user or others

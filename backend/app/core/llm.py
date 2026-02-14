@@ -10,7 +10,7 @@ class Chat:
     def __init__(self):
         self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-        prompt_path = Path(__file__).resolve().parents[1] / "context" / "system_prompt.txt"
+        prompt_path = Path(__file__).resolve().parents[1] / "context" / "test_important_info.txt"
         self.system_prompt = prompt_path.read_text(encoding="utf-8")
 
         self.conversation = Conversation()
