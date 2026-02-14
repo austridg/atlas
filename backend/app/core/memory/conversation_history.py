@@ -10,17 +10,17 @@ class Conversation:
         return self.messages
     
     def check_msg_limit(self) -> bool:
-        return len(self.messages) >= 5
+        return len(self.messages) >= 6
     
     def add_user_msg(self, message: str) -> None:
-        if self.check_msg_limit():
-            self.delete_conversation()
         self.messages.append({"role" : "user","content" : message})
+        if self.check_msg_limit():
+            self.messages.pop(0)
 
     def add_assistant_msg(self, message: str) -> None:
-        if self.check_msg_limit():
-            self.delete_conversation()
         self.messages.append({"role" : "assistant","content" : message})
+        if self.check_msg_limit():
+            self.messages.pop(0)
 
     def delete_conversation(self) -> None:
         self.messages.clear()
@@ -32,3 +32,7 @@ class Conversation:
     def print_conversation(self) -> None:
         for msg in self.messages:
             print(f"{msg['role']} : {msg['content']}")
+
+    # temp func
+    def debug_array(self) -> None:
+        print(self.messages)
